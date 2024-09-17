@@ -9,6 +9,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/quasar@2.1.0/dist/quasar.umd.prod.js" defer></script>
+        <audio id="speedAlert" src="alert.mp3" preload="auto"></audio>
         <script src="app.js" defer></script>
     </head>
     <body>
@@ -306,6 +307,13 @@
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="static" :thickness="0.24" color="dev" :min="0" :max="100" center-color="grey-10">
                         <q-icon id="Icons" name="fas fa-terminal" color="white"/>
                     </div>
+                    <transition name="fade">
+                        <div v-if="showSpeedIcon">
+                            <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" :thickness="0.24" :style="{color: speedIconColor}" :min="0" :max="100"></q-circular-progress>
+                            <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="static" :thickness="0.24" :style="{color: speedIconColor}" :min="0" :max="100" center-color="grey-10">
+                                <q-icon id="Icons" name="fas fa-tachometer-alt" color="white"/>
+                            </q-circular-progress>
+                        </div>
                     </transition>
                 </div>
             </div>
