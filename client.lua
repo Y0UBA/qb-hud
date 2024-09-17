@@ -855,6 +855,29 @@ CreateThread(function()
     end
 end)
 
+-- Speed Alert
+
+-- Higher speed 
+
+CreateThread(function()
+    while true do
+        Wait(100)
+        
+        local playerPed = PlayerPedId()
+        local vehicle = GetVehiclePedIsIn(playerPed, false)
+        local speed = 0
+        if vehicle ~= 0 then
+            speed = GetEntitySpeed(vehicle) * 2.23694 -- Speed Converter
+        end
+
+        SendNUIMessage({
+            action = "updateSpeed",
+            speed = speed
+        })
+    end
+end)
+
+
 -- Money HUD
 
 local Round = math.floor
