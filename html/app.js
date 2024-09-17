@@ -774,6 +774,9 @@ const playerHud = {
             healthColor: "",
             thirstColor: "",
             radioActive: false,
+            speed: 0,
+            showSpeedIcon: false,
+            speedIconColor: "#FF0000",
         };
     },
 
@@ -781,15 +784,21 @@ const playerHud = {
         window.removeEventListener("message", this.listener);
     },
     mounted() {
-        this.listener = window.addEventListener("message", (event) => {
+        this.listener = (event) => {
             if (event.data.action === "hudtick") {
                 this.hudTick(event.data);
+            } else if (event.data.action === "updateSpeed") {
+                this.updateSpeed(event.data.speed);
             }
-            // else if(event.data.update) {
-            //   eval(event.data.action + "(" + event.data.show + ')')
-            // }
-        });
+        };
+        window.addEventListener("message", this.listener);
+
         Config = {};
+    },
+    beforeUnmount() {  // Avoid memory leaks for vue3
+        if (this.listener) {
+            window.removeEventListener("message", this.listener);
+        }
     },
     methods: {
         hudTick(data) {
@@ -1002,6 +1011,25 @@ const playerHud = {
                 this.show = false;
             }
         },
+        updateSpeed(newSpeed) {
+            this.speed = newSpeed;
+            this.showSpeedIcon = newSpeed > 60; // max speed for alert
+
+            const speedAlert = document.getElementById("speedAlert");
+
+            if (newSpeed > 60) {
+                if (!this.isPlaying) {
+                    speedAlert.play();
+                    this.isPlaying = true;
+                }
+            } else {
+                if (this.isPlaying) {
+                    speedAlert.pause();
+                    speedAlert.currentTime = 0;
+                    this.isPlaying = false;
+                }
+            }
+        }
     },
 };
 const app2 = Vue.createApp(playerHud);
