@@ -23,4 +23,5 @@ files {
     'html/styles.css',
     'html/responsive.css',
     'html/app.js',
+    'html/alert.mp3'
 }
